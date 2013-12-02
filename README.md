@@ -50,10 +50,13 @@ All versions:
 
 ## Local test mode
 
-With sqlite and gunicorn:
+Initialize db:
 
-    gunicorn dj_six.wsgi
+    python manage.py syncdb
 
+Run with gunicorn:
+
+    gunicorn -w 10 dj_six.wsgi
 
 
 # Client usage
