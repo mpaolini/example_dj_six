@@ -7,6 +7,7 @@ from optparse import make_option
 from django.core.management.base import NoArgsCommand, CommandError
 from dj_six.perf.client import delete_items, post_item, get_item
 
+from requests import Session
 
 class Command(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
@@ -22,6 +23,7 @@ class Command(NoArgsCommand):
         url = opts.get('url')
         if not url:
             raise CommandError('url parameter is required')
+        sess = Session()
         # Delete all items
         delete_items(url)
         n_items = opts['n_items']
@@ -33,7 +35,7 @@ class Command(NoArgsCommand):
         # Get item
         start = time.time()
         for i in range(n_items):
-            get_item(url, i)
+            get_item(url, i, sess)
         dur_get = time.time() - start
-        return 'POST: {} GET: {}'.format(dur_post * 1000 / n_items,
+        return 'POST: {} GET: {}\n'.format(dur_post * 1000 / n_items,
                                          dur_get * 1000 / n_items)
