@@ -5,14 +5,33 @@ import json
 
 from .models import Item
 
+from rest_framework.test import APITestCase
 
 class ItemTestCase(TestCase):
 
     def test_post(self):
-        resp = self.client.post('/item/',
-                                json.dumps({'key': '1', 'value': 'one'}),
-                                content_type='application/json')
-        self.assertEqual(resp.status_code, 201)
-        self.assertEqual(Item.objects.count(), 1)
+		resp = self.client.post('/item/',
+			json.dumps({'key': '1', 'value': 'one'}),
+			content_type='application/json')
+		self.assertEqual(resp.status_code, 201)
+		self.assertEqual(Item.objects.count(), 1)
 
-                                
+class MyTests(APITestCase):
+
+	def tests(self):
+		response = self.client.post('/item/',
+			json.dumps({'key': '1', 'value': 'one'}),
+			content_type='application/json')
+		self.assertEqual(response.status_code, 201)
+		self.assertEqual(Item.objects.count(), 1)
+
+		response = self.client.get('/item/1/')
+		self.assertEqual(response.status_code, 200)
+		self.assertNotEqual(response, [])
+
+		response = self.client.delete('/item/1/')
+		self.assertEqual(response.status_code, 204)
+		self.assertEqual(Item.objects.count(), 0)
+
+		response = self.client.get('/item/1/')
+		self.assertEqual(response.data, {'detail':'Not found'})
