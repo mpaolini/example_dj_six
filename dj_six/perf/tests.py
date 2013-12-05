@@ -25,13 +25,20 @@ class MyTests(APITestCase):
 		self.assertEqual(response.status_code, 201)
 		self.assertEqual(Item.objects.count(), 1)
 
+		# response shouldn't be empty
 		response = self.client.get('/item/1/')
 		self.assertEqual(response.status_code, 200)
 		self.assertNotEqual(response, [])
 
+		# update the record
+		response = self.client.patch('/item/1/', {'value':'new value!'})
+		self.assertEqual(response.status_code, 200)
+
+		# after this delete there shall be no objects in the test DB
 		response = self.client.delete('/item/1/')
 		self.assertEqual(response.status_code, 204)
 		self.assertEqual(Item.objects.count(), 0)
 
+		# (optional) ensure the item has been removed
 		response = self.client.get('/item/1/')
 		self.assertEqual(response.data, {'detail':'Not found'})
