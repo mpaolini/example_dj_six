@@ -1,0 +1,41 @@
+{% load staticfiles %}
+
+<html>
+<head>
+	<style>
+		body {
+			background-color: #c0c0c0;
+		}
+		header {
+			text-align: center;
+		}
+		footer {
+			text-align: center;
+		   position:absolute;
+		   bottom:0;
+		   width:100%;
+		}
+	</style>
+</head>
+<body>
+
+{% block header %}
+<header><h1>Welcome!</h1></header>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block body %}
+DEFAULT BODY
+{% endblock %}
+
+{% block footer %}
+<footer><small>---=== All work and no play make Jack a dull boy ===---</small></footer>
+{% endblock %}
+
+</body>
+</html>

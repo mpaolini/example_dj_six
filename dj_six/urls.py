@@ -8,4 +8,9 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'item', ItemViewSet)
 
-urlpatterns = router.urls
+#urlpatterns = router.urls
+
+urlpatterns = patterns('',
+		url(r'^', include(router.urls)),
+		(r'^home$', 'common.views.home', {'template_name': 'home.html'}, 'home_view'),
+	)

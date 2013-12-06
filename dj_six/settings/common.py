@@ -40,9 +40,9 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = (
     'dj_six.perf',
-    'rest_framework'
+    'rest_framework',
+    'django.contrib.staticfiles'
 )
-
 
 MIDDLEWARE_CLASSES = (
 )
@@ -68,8 +68,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+STATIC_ROOT = "{}{}".format(BASE_DIR, '/static/')
 STATIC_URL = '/static/'
