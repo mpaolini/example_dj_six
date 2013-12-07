@@ -1,11 +1,11 @@
 [global]
-ApplicationName=quokkytest
-AwsCredentialFile=.secrets/aws_credential_credra
+ApplicationName=djsix
+AwsCredentialFile=.secrets/aws_credentials
 DevToolsEndpoint=git.elasticbeanstalk.eu-west-1.amazonaws.com
-EnvironmentName=quokkytest-env
+EnvironmentName=djsix-env
 EnvironmentType=LoadBalanced
 InstanceProfileName=
-OptionSettingFile=/home/marco/devel/dj_six/.elasticbeanstalk/optionsettings.djsix-env
+OptionSettingFile=.elasticbeanstalk/optionsettings.djsix-env
 RdsEnabled=No
 Region=eu-west-1
 ServiceEndpoint=https://elasticbeanstalk.eu-west-1.amazonaws.com
