@@ -6,35 +6,36 @@ open between subsequent requests.
 '''
 import requests
 import json
-from .models import Item
+
+
+def _do_request(method, url, session=None, **kwargs):
+    client = session if session is not None else requests
+    resp = client.request(method, url, **kwargs)
+    resp.raise_for_status()
+    try:
+        return resp.json()
+    except ValueError:
+        return resp.content
+
 
 def get_item(url, key, session=None):
-    if session is None:
-        r = requests.get("http://{}/{}/{}/".format(url, "item", key))
-    else:
-        r = session.get("http://{}/{}/{}/".format(url, "item", key))
-    return r.text
+    return _do_request('GET', 'http://{}/item/{}/'.format(url, key),
+                       session=session)
+
 
 def get_items(url, session=None):
-    if session is None:
-        r = requests.get("http://{}/{}/".format(url, "item"))
-    else:
-        r = session.get("http://{}/{}/".format(url, "item"))
-    return r.text
+    return  _do_request('GET', 'http://{}/item/'.format(url),
+                        session=session)
+
 
 def post_item(url, key, value, session=None):
     payload = { "key": key, "value": value }
-    if session is None:
-        requests.post("http://{}/{}/".format(url, "item"), data=payload)
-    else:
-        session.post("http://{}/{}/".format(url, "item"), data=payload)
+    return _do_request('POST', 'http://{}/item/'.format(url),
+                       session=session, data=payload)
+
 
 def delete_items(url, session=None):
-    j = get_items(url)
-    objs = json.loads(j)
-    for item in objs:
-        _url = "http://{}/{}/{}/".format(url, "item", item['key'])
-        if session is None:
-            requests.delete(_url)
-        else:
-            session.delete(_url)
+    data = get_items(url)
+    for item in data:
+        _do_request('DELETE', "http://{}/item/{}/".format(url, item['key']),
+                    session=session)
