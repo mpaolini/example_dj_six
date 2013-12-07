@@ -1,6 +1,6 @@
 [global]
 ApplicationName=quokkytest
-AwsCredentialFile=/home/marco/.elasticbeanstalk/aws_credential_file
+AwsCredentialFile=.secrets/aws_credential_credra
 DevToolsEndpoint=git.elasticbeanstalk.eu-west-1.amazonaws.com
 EnvironmentName=quokkytest-env
 EnvironmentType=LoadBalanced
