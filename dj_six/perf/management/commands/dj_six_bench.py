@@ -11,21 +11,24 @@ from requests import Session
 
 class Command(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
-        make_option('--n-items',
-            type=int,
-            default=100,
-            help='number of items created in the benchmark'),
-        make_option('--url',
-            help='base url'),
-        )
+        make_option('--n-items', type=int, default=100,
+                    help='number of items created in the benchmark'),
+        make_option('--host'),
+        make_option('--mode',
+                    help='parallelization mode',
+                    default='sync'
+                ),
+    )
 
     def handle_noargs(self, **opts):
-        url = opts.get('url')
+        url = opts.get('host')
         if not url:
             raise CommandError('url parameter is required')
         sess = Session()
+        start = time.time()
         # Delete all items
-        delete_items(url)
+        delete_items(url, mode=opts.get('mode'))
+        dur_delete = time.time() - start
         n_items = opts['n_items']
         # Post item
         start = time.time()
@@ -37,5 +40,7 @@ class Command(NoArgsCommand):
         for i in range(n_items):
             get_item(url, i, sess)
         dur_get = time.time() - start
-        return 'POST: {} GET: {}\n'.format(dur_post * 1000 / n_items,
-                                         dur_get * 1000 / n_items)
+        return 'DELETE: {} POST: {} GET: {}\n'.format(
+            dur_delete * 1000 / n_items,
+            dur_post * 1000 / n_items,
+            dur_get * 1000 / n_items)

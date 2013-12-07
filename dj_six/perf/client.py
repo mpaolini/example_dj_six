@@ -34,8 +34,22 @@ def post_item(url, key, value, session=None):
                        session=session, data=payload)
 
 
-def delete_items(url, session=None):
+def delete_items(url, session=None, mode='sync'):
     data = get_items(url)
-    for item in data:
-        _do_request('DELETE', "http://{}/item/{}/".format(url, item['key']),
-                    session=session)
+    if mode == 'gevent':
+        import gevent
+        import gevent.monkey
+        gevent.monkey.patch_socket()
+        reload(requests)
+        greenlets = [gevent.spawn(_do_request,
+                                  'DELETE',
+                                  'http://{}/item/{}/'.format(url, item['key']),
+                                  session=session)
+                     for item in data]
+        gevent.joinall(greenlets)
+    elif mode == 'sync':
+        for item in data:
+            _do_request('DELETE', "http://{}/item/{}/".format(url, item['key']),
+                        session=session)
+    else:
+        raise ValueError('invalid mode: "{}"'.format(mode))
