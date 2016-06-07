@@ -1,4 +1,4 @@
 -r requirements/common.txt
 -r requirements/postgres.txt
 -r requirements/heroku.txt
-
+-r requirements/dev.txt

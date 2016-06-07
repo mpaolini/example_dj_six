@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django.test import TestCase
 import json
 
-from .models import Item
+from dj_six.perf.models import Item
 
 
 class ItemTestCase(TestCase):
@@ -14,5 +14,3 @@ class ItemTestCase(TestCase):
                                 content_type='application/json')
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(Item.objects.count(), 1)
-
-                                
